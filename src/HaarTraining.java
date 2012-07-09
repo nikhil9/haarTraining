@@ -2,6 +2,7 @@ import com.googlecode.javacv.cpp.opencv_core.IplImage;
 import static com.googlecode.javacv.cpp.opencv_core.*;
 import static com.googlecode.javacv.cpp.opencv_highgui.*;
 import static com.googlecode.javacv.cpp.opencv_objdetect.*;
+import static com.googlecode.javacv.cpp.opencv_imgproc.*;
 
 public class HaarTraining{
 	
@@ -9,7 +10,7 @@ public class HaarTraining{
 	
 	public static void main(String[] args){
 		
-		IplImage img = cvLoadImage("test10.bmp");
+		IplImage img = cvLoadImage("test1.bmp");
 		//cvShowImage("img", img);
 		
 		//Loader.load(opencv_objdetect.class); 
@@ -19,17 +20,21 @@ public class HaarTraining{
 	
 	public static void detect(IplImage src){
 		
-	CvHaarClassifierCascade cascade = new CvHaarClassifierCascade(
+	IplImage gray = cvCreateImage(cvGetSize(src), 8, 1);
+		
+		CvHaarClassifierCascade cascade = new CvHaarClassifierCascade(
             cvLoad(XML_FILE));
 	
 	CvMemStorage storage = CvMemStorage.create();
-		
+	
+	cvCvtColor(src, gray, CV_BGR2GRAY );
+	
 	CvSeq sign = cvHaarDetectObjects(
-			src,
+			gray,
 			cascade,
 			storage,
 			1.5,
-			3,
+			5,
 			CV_HAAR_DO_CANNY_PRUNING);
 	
 	cvClearMemStorage(storage);
